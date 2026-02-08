@@ -1,0 +1,31 @@
+#include <Wire.h>
+
+bool izinKirim = false;
+
+void receiveEvent(int bytes) {
+  uint8_t cmd = Wire.read();
+
+  if (cmd == 0x01) {
+    izinKirim = true;
+  } 
+  else if (cmd == 0x02) {
+    izinKirim = false;
+  }
+}
+
+void requestEvent() {
+  if (izinKirim) {
+    Wire.write("DATA_OK");
+    izinKirim = false; // auto reset izin
+  } else {
+    Wire.write("NO_DATA");
+  }
+}
+
+void setup() {
+  Wire.begin(0x08);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+}
+
+void loop() {}
