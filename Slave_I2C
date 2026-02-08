@@ -1,0 +1,21 @@
+#include <Wire.h>
+
+void receiveEvent(int bytes) {
+  while (Wire.available()) {
+    char c = Wire.read();
+    Serial.print(c);
+  }
+}
+
+void requestEvent() {
+  Wire.write("OK");
+}
+
+void setup() {
+  Wire.begin(0x08); // alamat slave
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+  Serial.begin(115200);
+}
+
+void loop() {}
