@@ -1,0 +1,50 @@
+#include <Wire.h>
+
+#define SLAVE_ADDR 0x08
+
+#define CMD_ALLOW_SEND 0x01
+#define CMD_STOP_SEND  0x02
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22); // SDA, SCL
+}
+
+void loop() {
+
+  // =========================
+  // 1. MASTER KIRIM IZIN
+  // =========================
+  Wire.beginTransmission(SLAVE_ADDR);
+  Wire.write(CMD_ALLOW_SEND);   // kasih izin
+  Wire.endTransmission();
+
+  Serial.println("Master: izin dikirim");
+
+  delay(10);
+
+  // =========================
+  // 2. MASTER REQUEST DATA
+  // =========================
+  Wire.requestFrom(SLAVE_ADDR, 8);
+
+  Serial.print("Master terima: ");
+  while (Wire.available()) {
+    char c = Wire.read();
+    Serial.print(c);
+  }
+  Serial.println();
+
+  delay(2000);
+
+  // =========================
+  // 3. MASTER STOP IZIN
+  // =========================
+  Wire.beginTransmission(SLAVE_ADDR);
+  Wire.write(CMD_STOP_SEND);
+  Wire.endTransmission();
+
+  Serial.println("Master: izin dicabut");
+
+  delay(3000);
+}
