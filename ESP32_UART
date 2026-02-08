@@ -1,0 +1,22 @@
+HardwareSerial SerialESP32(2);
+
+void setup() {
+  Serial.begin(115200); // monitor
+  SerialESP32.begin(9600, SERIAL_8N1, 16, 17); // RX, TX
+
+  Serial.println("UART2 siap TX & RX");
+}
+
+void loop() {
+  // TRANSMIT
+  SerialESP32.println("Hello dari ESP32");
+
+  // RECEIVE
+  if (SerialESP32.available()) {
+    String data = SerialESP32.readStringUntil('\n');
+    Serial.print("Terima: ");
+    Serial.println(data);
+  }
+
+  delay(1000);
+}
