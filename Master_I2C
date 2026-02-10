@@ -7,7 +7,8 @@ void setup() {
 
 void loop() {
   Wire.beginTransmission(0x08); // alamat slave
-  Wire.write("halo");
+  String pesan  = "Tulis pesan";
+  Wire.write((const uint8_t*)pesan.c_str(), pesan.length());
   Wire.endTransmission();
 
   Wire.requestFrom(0x08, 4); // minta 4 byte
